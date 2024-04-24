@@ -15,14 +15,19 @@ pdfName = "pdf1"
 pdf = open("C:\Projects\ConvertPDF\\" + pdfName + ".pdf","rb")
 pdfreader = PyPDF2.PdfReader(pdf)
 x = len(pdfreader.pages)
-pdf = pdfreader.pages[0]
-text = pdf.extract_text()
+result = []
 
+for i in range(0,x-1):
+    selected_page = pdfreader.pages[i]
+    text = selected_page.extract_text()
+    result.append(text)
+
+print(str(result))
 
 textDocPath = "C:\Projects\ConvertPDF\\TextOutput" + str(numberPDFs) + "_From_" + pdfName + ".txt"
 
-file1 = open(textDocPath,"a")
-file1.writelines(text)
+file1 = open(textDocPath, "a", encoding="utf-8")
+file1.writelines(result)
 file1.close()
 
 
