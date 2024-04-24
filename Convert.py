@@ -7,20 +7,26 @@ from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
 
+#initiale Seite
 @app.route('/')
 def index():
     return render_template('index.html')
 
+#Beim click des upload buttons gibts nen redirect hierhin
 @app.route('/upload', methods=['POST'])
 def upload():
 
+    #system sagen, wo der upload folder liegt
     app.config['UPLOAD_FOLDER'] = 'C:\Projects\ConvertPDF\\venv\\UPLOAD_FOLDER'
+    #hochgeladenen pdf abholen
     uploaded_file = request.files['avatar']
     if uploaded_file.filename != '':
-        pdf_name = uploaded_file.filename[:-4]  # Remove the ".pdf" extension from the filename
-        pdf_folder = "uploaded_pdfs"
 
+        #Pdf namen extrahieren
+        pdf_name = uploaded_file.filename[:-4]  # Remove the ".pdf" extension from the filename
+        #Im Ordner speichern
         uploaded_file.save(os.path.join(app.config['UPLOAD_FOLDER'], pdf_name + ".pdf"))
+        #Übergeben in meine Extractor Funnction und abspeichern des Ergebnis zur direkten darstellung
         resultText = ReadPDFandOutput(pdf_name)
         return str(resultText)
     return "No file selected!"
